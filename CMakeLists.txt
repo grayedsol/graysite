@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(FetchContent)
 include("${CMAKE_SOURCE_DIR}/external/md4c.cmake")
-include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/_deps/md4c-src/src")
+include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/md4c-src/src")
 
 set(SOURCES
 	src/md4c-html-process.cpp
@@ -28,4 +28,5 @@ target_sources(${PROJECT_NAME} PUBLIC
 
 target_include_directories(${PROJECT_NAME}
 	PRIVATE include
+	PUBLIC ${MD4C_INCLUDE_DIR}
 )

@@ -12,4 +12,5 @@ FetchContent_MakeAvailable(md4c)
 FetchContent_GetProperties(md4c
 	SOURCE_DIR MD4C_SOURCE_DIR
 )
+
 set(MD4C_INCLUDE_DIR ${SOURCE_DIR}/src)
