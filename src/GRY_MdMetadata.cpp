@@ -41,7 +41,7 @@ static int GRY_MdMetadataLoad(GRY_MdMetadata* data, const char* key, std::filesy
 			data->data[i] = NULL;
 			std::ifstream inputFile(path);
 			if (inputFile.fail()) {
-				std::cerr << "Error opening file \"" << path << "\".\n";
+				std::cerr << "Error opening file " << path << ".\n";
 				return -1;
 			}
 			inputFile.ignore(std::numeric_limits<std::streamsize>::max());
