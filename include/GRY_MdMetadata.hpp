@@ -59,5 +59,5 @@ struct GRY_MdMetadata {
 	 * @return 0 on success, or -1 on error
 	 */
 	template <typename CHAR_T>
-	int read(std::ifstream& file, const CHAR_T* directory, bool overwrite = true);
+	int read(std::ifstream& file, const CHAR_T* directory, const CHAR_T* root, bool overwrite = true);
 };

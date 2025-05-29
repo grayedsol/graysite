@@ -11,5 +11,5 @@ namespace GRY_mdToHTML {
 	 * @return 0 on success, -1 on failure.
 	 */
 	template<typename CHAR_T>
-	int mdToHtml(const CHAR_T* filename, const GRY_MdMetadata* defaultMetadata = nullptr);
+	int mdToHtml(const CHAR_T* filename, const CHAR_T* root, const GRY_MdMetadata* defaultMetadata = nullptr);
 };

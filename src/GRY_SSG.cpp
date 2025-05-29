@@ -8,12 +8,13 @@
 #include <iostream>
 #include <filesystem>
 
+using filechar_t = std::filesystem::__cxx11::path::value_type;
+
 static const char* defaultTxt = "Default.txt";
 
-template <typename CHAR_T>
-int GRY_generateSite(const CHAR_T* path, const GRY_MdMetadata* defaultMetadata, bool recursive);
+int GRY_generateSite(std::filesystem::path path, std::filesystem::path root, const GRY_MdMetadata* defaultMetadata, bool recursive);
 
-int GRY_generateSiteDir(std::filesystem::path directory, bool recursive) {
+int GRY_generateSiteDir(std::filesystem::path directory, std::filesystem::path root, bool recursive) {
 	namespace fs = std::filesystem;
 
 	int retVal = 0;
@@ -24,7 +25,7 @@ int GRY_generateSiteDir(std::filesystem::path directory, bool recursive) {
 	if (fs::exists(metadataPath) && fs::is_regular_file(metadataPath)) {
 		std::ifstream metadataFile(metadataPath);
 		if (metadataFile.good()) {
-			metadata.read(metadataFile, directory.c_str());
+			metadata.read(metadataFile, directory.c_str(), root.c_str());
 			metadataPtr = &metadata;
 		}
 		else {
@@ -36,7 +37,7 @@ int GRY_generateSiteDir(std::filesystem::path directory, bool recursive) {
 	for (const auto& item : fs::directory_iterator(directory)) {
 		if ((fs::is_directory(item.status()) && recursive) ||
 			(fs::is_regular_file(item.status()) && item.path().extension() == ".md")) {
-			if (GRY_generateSite(item.path().c_str(), metadataPtr, recursive)) {
+			if (GRY_generateSite(item.path(), root, metadataPtr, recursive)) {
 				retVal = -1;
 			}
 		}
@@ -45,34 +46,34 @@ int GRY_generateSiteDir(std::filesystem::path directory, bool recursive) {
 	return retVal;
 }
 
-template <typename CHAR_T>
-int GRY_generateSite(const CHAR_T* path, const GRY_MdMetadata* defaultMetadata, bool recursive) {
+int GRY_generateSite(std::filesystem::path path, std::filesystem::path root, const GRY_MdMetadata* defaultMetadata, bool recursive) {
+	namespace fs = std::filesystem;
+
+	if (!fs::exists(path)) {
+		std::cerr << "Error: Directory or file " << path << " did not exist.\n";
+		return -1;
+	}
+
+	if (fs::is_regular_file(path) && path.extension() == ".md") {
+		return GRY_mdToHTML::mdToHtml(path.c_str(), root.c_str(), defaultMetadata);
+	}
+
+	if (!fs::is_directory(path)) {
+		std::cerr << "Error: " << path << " was not a valid .md file or a directory.\n";
+		return -1;
+	}
+
+	return GRY_generateSiteDir(path, root, recursive);
+}
+
+template <>
+int GRY_generateSite(const filechar_t* path, bool recursive) {
 	namespace fs = std::filesystem;
 
 	fs::path root(path);
-	if (!fs::exists(root)) {
-		std::cerr << "Error: Directory or file " << root << " did not exist.\n";
-		return -1;
-	}
-
-	if (fs::is_regular_file(root) && root.extension() == ".md") {
-		return GRY_mdToHTML::mdToHtml(root.c_str(), defaultMetadata);
-	}
-
 	if (!fs::is_directory(root)) {
-		std::cerr << "Error: " << root << " was not a valid .md file or a directory.\n";
-		return -1;
+		root.remove_filename();
 	}
 
-	return GRY_generateSiteDir(root, recursive);
+	return GRY_generateSite(fs::path(path), root, nullptr, recursive);
 }
-
-template <typename CHAR_T>
-int GRY_generateSite(const CHAR_T* path, bool recursive) {
-	return GRY_generateSite(path, nullptr, recursive);
-}
-
-template int GRY_generateSite(const char* path, bool recursive);
-template int GRY_generateSite(const wchar_t* path, bool recursive);
-template int GRY_generateSite(const char* path, const GRY_MdMetadata* defaultMetadata, bool recursive);
-template int GRY_generateSite(const wchar_t* path, const GRY_MdMetadata* defaultMetadata, bool recursive);

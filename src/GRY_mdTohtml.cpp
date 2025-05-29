@@ -8,8 +8,10 @@
 
 #define FILE_BUFFER_SIZE 65535
 
-template <typename CHAR_T>
-int GRY_mdToHTML::mdToHtml(const CHAR_T* filename, const GRY_MdMetadata* defaultMetadata) {
+using filechar_t = std::filesystem::__cxx11::path::value_type;
+
+template <>
+int GRY_mdToHTML::mdToHtml(const filechar_t* filename, const filechar_t* root, const GRY_MdMetadata* defaultMetadata) {
 	namespace fs = std::filesystem;
 
 	fs::path path(filename);
@@ -24,7 +26,7 @@ int GRY_mdToHTML::mdToHtml(const CHAR_T* filename, const GRY_MdMetadata* default
 	std::ifstream fileStream(path);
 	GRY_MdMetadata metadata;
 	if (defaultMetadata) { metadata = *defaultMetadata; }
-	metadata.read(fileStream, directory.c_str());
+	metadata.read(fileStream, directory.c_str(), root);
 
 	char buffer[FILE_BUFFER_SIZE + 1] = { 0 };
 	fileStream.read(buffer, FILE_BUFFER_SIZE);
@@ -49,6 +51,3 @@ int GRY_mdToHTML::mdToHtml(const CHAR_T* filename, const GRY_MdMetadata* default
 
 	return 0;
 }
-
-template int GRY_mdToHTML::mdToHtml(const char* filename, const GRY_MdMetadata* defaultMetadata);
-template int GRY_mdToHTML::mdToHtml(const wchar_t* filename, const GRY_MdMetadata* defaultMetadata);

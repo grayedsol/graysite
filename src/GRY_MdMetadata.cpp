@@ -9,6 +9,8 @@
 
 #define TOKEN_SIZE 127
 
+using filechar_t = std::filesystem::__cxx11::path::value_type;
+
 static const char* GRY_MdMetadataStrings[GRY_MdMetadata::Key::SIZE] = {
 	"Type",
 	"Title",
@@ -103,8 +105,8 @@ void GRY_MdMetadata::set(Key key, const char* value) {
 	data[key] = strcpy(new char[strlen(value) + 1], value);
 }
 
-template <typename CHAR_T>
-int GRY_MdMetadata::read(std::ifstream& file, const CHAR_T* directory, bool overwrite) {
+template <>
+int GRY_MdMetadata::read(std::ifstream& file, const filechar_t* directory, const filechar_t* root, bool overwrite) {
 	namespace fs = std::filesystem;
 
 	std::string key;
@@ -129,9 +131,18 @@ int GRY_MdMetadata::read(std::ifstream& file, const CHAR_T* directory, bool over
 
 		if (value[0] == '\"' && value[strlen(value) - 1] == '\"') {
 			value[strlen(value) - 1] = '\0';
-			fs::path path = fs::path(directory) / (value + 1);
+			char* value1 = value + 1;
+			fs::path path;
+			// If the path starts with `/`, use path relative to root directory
+			if (*value1 == '/') {
+				path = fs::path(root);
+				path += value1;
+			}
+			else {
+				path = fs::path(directory) / value1;
+			}
 			if (GRY_MdMetadataLoad(this, key.c_str(), path, overwrite)) {
-				std::cerr << "Metadata loading error for key-value pair: " << key << ": " << value + 1 << '\n';
+				std::cerr << "Metadata loading error for key-value pair: " << key << ": " << value1 << '\n';
 				return -1;
 			}
 		}
@@ -145,6 +156,3 @@ int GRY_MdMetadata::read(std::ifstream& file, const CHAR_T* directory, bool over
 
 	return 0;
 }
-
-template int GRY_MdMetadata::read(std::ifstream& file, const char* directory, bool overwrite);
-template int GRY_MdMetadata::read(std::ifstream& file, const wchar_t* directory, bool overwrite);
