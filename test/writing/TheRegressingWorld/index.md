@@ -1,5 +1,5 @@
 Title: The Regressing World
-Stylesheet: /style.css
+Stylesheet: ../../style.css
 Description: The Regressing World Chapter List
 Author: Grayedsol
 Header: <h1>The Regressing World</h1>

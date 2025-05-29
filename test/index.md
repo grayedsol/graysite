@@ -1,5 +1,5 @@
 Title: Grayedsol Works
-Stylesheet: /style.css
+Stylesheet: style.css
 Description: Directory for works from Grayedsol
 Author: Grayedsol
 Footer: "footer.html"
