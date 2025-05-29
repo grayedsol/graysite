@@ -11,4 +11,9 @@ namespace GRY_mdToHTML {
 	 * @return 0 on success, -1 on failure.
 	 */
 	int mdToHtml(const char* filename, const GRY_MdMetadata* defaultMetadata = nullptr);
+
+	/**
+	 * @copydoc mdToHtml
+	 */
+	int mdToHtml(const wchar_t* filename, const GRY_MdMetadata* defaultMetadata = nullptr);
 };
