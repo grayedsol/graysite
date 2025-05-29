@@ -10,10 +10,6 @@ namespace GRY_mdToHTML {
 	 * @param defaultMetadata Default metadata to use, if any
 	 * @return 0 on success, -1 on failure.
 	 */
-	int mdToHtml(const char* filename, const GRY_MdMetadata* defaultMetadata = nullptr);
-
-	/**
-	 * @copydoc mdToHtml
-	 */
-	int mdToHtml(const wchar_t* filename, const GRY_MdMetadata* defaultMetadata = nullptr);
+	template<typename CHAR_T>
+	int mdToHtml(const CHAR_T* filename, const GRY_MdMetadata* defaultMetadata = nullptr);
 };

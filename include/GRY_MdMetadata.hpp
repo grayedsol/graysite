@@ -52,20 +52,12 @@ struct GRY_MdMetadata {
 	void set(Key key, const char* value);
 
 	/**
-	 * @brief Read meta data from `buffer`.
-	 * 
-	 * @param buffer String buffer of a file to read meta data from
-	 * @param mode Reading mode that determines which values will be overwritten
-	 * @return Offset of `buffer` where meta data ends, or -1 on error
-	 */
-	long read(char* buffer, long filelength, bool overwrite = true);
-
-	/**
 	 * @brief Read meta data from `file`.
 	 * 
 	 * @param file Input file stream of the markdown file
 	 * @param mode Reading mode that determines which values will be overwritten
 	 * @return 0 on success, or -1 on error
 	 */
-	int read(std::ifstream& file, bool overwrite = true);
+	template <typename CHAR_T>
+	int read(std::ifstream& file, const CHAR_T* directory, bool overwrite = true);
 };

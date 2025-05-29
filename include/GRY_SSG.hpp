@@ -1,5 +1,4 @@
 #pragma once
 
-int GRY_generateSite(const char* directory);
-
-int GRY_generateSite(const wchar_t* directory);
+template <typename CHAR_T>
+int GRY_generateSite(const CHAR_T* directory);
