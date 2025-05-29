@@ -1,0 +1,6 @@
+Title: The Regressing World
+Stylesheet: ../readStyle.css
+Description: The Regressing World
+Author: Grayedsol
+Header: <h1>The Regressing World</h1>
+Footer: <h2><a href="./">Back</a></h2><footer><p>© Grayedsol 2025</p></footer>
