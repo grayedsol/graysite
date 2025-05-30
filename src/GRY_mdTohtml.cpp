@@ -35,7 +35,7 @@ int GRY_mdToHTML::mdToHtml(const filechar_t* filename, const filechar_t* root, c
 	md4c_html_args htmlArgs;
 	htmlArgs.input = buffer;
 	htmlArgs.input_size = fileLength;
-	htmlArgs.parser_flags = 0;
+	htmlArgs.parser_flags = MD_FLAG_TABLES;
 	htmlArgs.user_flags = 0;
 
 	path.replace_extension(".html");
